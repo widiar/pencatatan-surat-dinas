@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="{{ asset('images/icon/favicon.ico') }}">
@@ -18,6 +19,8 @@
     <!-- Start datatable css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/datatables/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/datatables/responsive.bootstrap4.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.min.css') }}">
     <!-- others css -->
     <link rel="stylesheet" href="{{ asset('css/typography.css') }}">
     <link rel="stylesheet" href="{{ asset('css/default-css.css') }}">

@@ -24,7 +24,7 @@ class PencatatanRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route('id');
+        $id = $this->route('pencatatan');
         return [
             'no_surat' => [
                 'required',

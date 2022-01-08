@@ -44,13 +44,21 @@
                     <td>{{ $data->nomor_surat }}</td>
                     <td>{{ $data->tanggal }}</td>
                     <td>{{ $data->dinas_berkunjung }}</td>
-                    <td><h3 class="badge badge-success">{{ $data->status }}</h3></td>
+                    <td>
+                        @if($data->status == 'akan datang')
+                        <h3 class="badge badge-info">Akan Datang</h3>
+                        @elseif($data->status == 'berlangsung')
+                        <h3 class="badge badge-secondary">Berlangsung</h3>
+                        @else
+                        <h3 class="badge badge-success">Selesai</h3>
+                        @endif
+                    </td>
                     <td class="row justify-content-center" style="min-width: 120px">
                         <a href="{{ route('pencatatan.edit', $data->id) }}" class="mx-2">
                             <button class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
                         </a>
                         <form action="{{ route('pencatatan.destroy', $data->id) }}" method="POST"
-                            class="deleteData" data-extra="Akan Menghapus Mata Kuliah yg Berhubungan.">
+                            class="deleted">
                             @method('DELETE')
                             @csrf
                             <button class="btn btn-danger btn-sm" type="submit"><i class="fas fa-trash"></i></button>

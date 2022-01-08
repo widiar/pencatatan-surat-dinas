@@ -66,7 +66,8 @@ class PencatatanController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = PencatatanSurat::find($id);
+        return view('pencatatan.edit', compact('data'));
     }
 
     /**
@@ -76,9 +77,15 @@ class PencatatanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PencatatanRequest $request, $id)
     {
-        //
+        $data = PencatatanSurat::find($id);
+        $data->nomor_surat = $request->no_surat;
+        $data->dinas_berkunjung = $request->dinas;
+        $data->tanggal = $request->tanggal;
+        $data->status = $request->status;
+        $data->save();
+        return redirect()->route('pencatatan.index')->with('success', 'Data berhasil di update');
     }
 
     /**
@@ -89,6 +96,8 @@ class PencatatanController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = PencatatanSurat::find($id);
+        $data->delete();
+        return response()->json('Sukses');
     }
 }

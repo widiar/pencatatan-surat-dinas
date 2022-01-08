@@ -37,7 +37,7 @@
                             <h4 class="user-name dropdown-toggle" data-toggle="dropdown">{{ Auth::user()->name }} <i class="fa fa-angle-down"></i></h4>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#">Profile</a>
-                                <a class="dropdown-item" href="{{ route('logout') }}">Log Out</a>
+                                <a class="dropdown-item logout" href="{{ route('logout') }}">Log Out</a>
                             </div>
                         </div>
                     </div>

@@ -14,24 +14,24 @@
                         </a>
                     </li>
 
-                    <li class="{{request()->is('pencatatan/*') ? ' active' : '' }}">
-                        <a href="#">
-                            <i class="ti-receipt"></i><span>Pencatatan Surat</span>
+                    <li class="{{request()->is('pencatatan*') ? ' active' : '' }}">
+                        <a href="{{ route('pencatatan.index') }}">
+                            <i class="ti-book"></i><span>Pencatatan Surat</span>
                         </a>
                     </li>
-                    <li class="{{request()->is('pencatatan/*') ? ' active' : '' }}">
+                    <li class="{{request()->is('laporan/*') ? ' active' : '' }}">
                         <a href="#">
-                            <i class="ti-receipt"></i><span>Laporan Dinas</span>
+                            <i class="ti-agenda"></i><span>Laporan Dinas</span>
                         </a>
                     </li>
-                    <li class="{{request()->is('pencatatan/*') ? ' active' : '' }}">
+                    <li class="{{request()->is('berkunjung/*') ? ' active' : '' }}">
                         <a href="#">
-                            <i class="ti-receipt"></i><span>Berkunjung</span>
+                            <i class="ti-briefcase"></i><span>Berkunjung</span>
                         </a>
                     </li>
-                    <li class="{{request()->is('pencatatan/*') ? ' active' : '' }}">
+                    <li class="{{request()->is('user-management/*') ? ' active' : '' }}">
                         <a href="#">
-                            <i class="ti-receipt"></i><span>User Management</span>
+                            <i class="ti-user"></i><span>User Management</span>
                         </a>
                     </li>
                     

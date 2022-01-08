@@ -15,11 +15,16 @@
     <link rel="stylesheet" href="{{ asset('css/slicknav.min.css') }}">
     <!-- amchart css -->
     <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <!-- Start datatable css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/datatables/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/datatables/responsive.bootstrap4.min.css') }}">
     <!-- others css -->
     <link rel="stylesheet" href="{{ asset('css/typography.css') }}">
     <link rel="stylesheet" href="{{ asset('css/default-css.css') }}">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('plugins/datepicker/css/bootstrap-datepicker.standalone.min.css') }}">
     <!-- modernizr css -->
     <script src="{{ asset('js/vendor/modernizr-2.8.3.min.js') }}"></script>
 

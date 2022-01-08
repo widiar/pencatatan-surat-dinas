@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PencatatanRequest;
+use App\Models\PencatatanSurat;
 use Illuminate\Http\Request;
 
 class PencatatanController extends Controller
@@ -13,7 +15,7 @@ class PencatatanController extends Controller
      */
     public function index()
     {
-        $pencatatan = NULL;
+        $pencatatan = PencatatanSurat::all();
         return view('pencatatan.index', compact('pencatatan'));
     }
 
@@ -33,9 +35,16 @@ class PencatatanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PencatatanRequest $request)
     {
-        //
+        $data = PencatatanSurat::create([
+            'nomor_surat' => $request->no_surat,
+            'dinas_berkunjung' => $request->dinas,
+            'tanggal' => $request->tanggal,
+            'status' => $request->status
+        ]);
+        if($data) return redirect()->route('pencatatan.index')->with('success', 'Data berhasil di tambahkan');
+        else return redirect()->route('pencatatan.index')->with('error', 'Data gagal di tambahkan');
     }
 
     /**

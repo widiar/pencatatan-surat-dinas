@@ -27,6 +27,7 @@
                 <tr>
                     <th>NO</th>
                     <th class="all">Nomor Surat</th>
+                    <th>Tanggal</th>
                     <th>Berkunjung</th>
                     <th>Status</th>
                     <th class="text-center">Aksi</th>
@@ -40,17 +41,19 @@
                 @foreach ($pencatatan as $data)
                 <tr>
                     <td>{{ ++$no }}</td>
-                    <td>{{ $data->nama }}</td>
-                    <td>{{ $data->jurusan->nama }}</td>
+                    <td>{{ $data->nomor_surat }}</td>
+                    <td>{{ $data->tanggal }}</td>
+                    <td>{{ $data->dinas_berkunjung }}</td>
+                    <td><h3 class="badge badge-success">{{ $data->status }}</h3></td>
                     <td class="row justify-content-center" style="min-width: 120px">
-                        <a href="{{ route('admin.konsentrasi.edit', $data->id) }}" class="mx-2">
-                            <button class="btn btn-primary"><i class="fas fa-edit"></i></button>
+                        <a href="{{ route('pencatatan.edit', $data->id) }}" class="mx-2">
+                            <button class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
                         </a>
-                        <form action="{{ route('admin.konsentrasi.destroy', $data->id) }}" method="POST"
+                        <form action="{{ route('pencatatan.destroy', $data->id) }}" method="POST"
                             class="deleteData" data-extra="Akan Menghapus Mata Kuliah yg Berhubungan.">
                             @method('DELETE')
                             @csrf
-                            <button class="btn btn-danger" type="submit"><i class="fas fa-trash"></i></button>
+                            <button class="btn btn-danger btn-sm" type="submit"><i class="fas fa-trash"></i></button>
                         </form>
                     </td>
                 </tr>

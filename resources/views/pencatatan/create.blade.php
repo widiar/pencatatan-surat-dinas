@@ -5,7 +5,7 @@
 @section('main-content')
 <div class="card shadow mt-5">
     <div class="card-body">
-        <form action="#" method="POST">
+        <form action="{{ route('pencatatan.store') }}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="text">Nomor Surat<span class="text-danger">*</span></label>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LaporanDinas;
 use Illuminate\Http\Request;
 
 class LaporanDinasController extends Controller
@@ -13,7 +14,7 @@ class LaporanDinasController extends Controller
      */
     public function index()
     {
-        $laporan = NULL;
+        $laporan = LaporanDinas::with('pencatatan')->get();
         return view('laporan-dinas.index', compact('laporan'));
     }
 
@@ -35,7 +36,36 @@ class LaporanDinasController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
+        $request->validate([
+            'no_surat' => 'required',
+            'hasil' => 'required'
+        ]);
+        
+        try {
+            $lap = LaporanDinas::create([
+                'pencatatan_surat_id' => $request->no_surat,
+                'hasil_laporan' => $request->hasil
+            ]);
+            //save nota
+            foreach ($request->notafile as $file) {
+                $lap->nota()->create([
+                    'foto' => $file->hashName()
+                ]);
+                $file->storeAs('public/laporan-dinas/nota', $file->hashName());
+            }
+            //save dokumentasi
+            foreach ($request->dokfile as $file) {
+                $lap->dokumentasi()->create([
+                    'foto' => $file->hashName()
+                ]);
+                $file->storeAs('public/laporan-dinas/dokumentasi', $file->hashName());
+            }
+            $request->session()->flash('success', 'Berhasil menambah data');
+            return response()->json('Sukses');
+        } catch (\Throwable $th) {
+            return response()->json($th->getMessage(), 500);
+        }
     }
 
     /**
@@ -46,7 +76,8 @@ class LaporanDinasController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = LaporanDinas::with(['nota', 'dokumentasi'])->findOrFail($id);
+        return response()->json($data);
     }
 
     /**

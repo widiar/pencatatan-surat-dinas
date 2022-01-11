@@ -228,6 +228,8 @@
                 dataform.append('dokfile[]', file)
             }
         })
+
+        dataform.append('hasil', CKEDITOR.instances.hasil.getData())
         $.ajax({
             url: $(this).attr('action'),
             data: dataform,
@@ -235,10 +237,10 @@
             contentType: false, 
             processData: false, 
             success: (res) => {
-                console.log(res)
+                if(res == 'Sukses') window.location.href = '{{ route("laporan-dinas.index") }}'
             }, 
             error: (err) => {
-                console.log(err)
+                console.log(err.responseJSON)
             }
         });
     })

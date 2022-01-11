@@ -19,8 +19,8 @@
                             <i class="ti-book"></i><span>Pencatatan Surat</span>
                         </a>
                     </li>
-                    <li class="{{request()->is('laporan/*') ? ' active' : '' }}">
-                        <a href="#">
+                    <li class="{{request()->is('laporan-dinas*') ? ' active' : '' }}">
+                        <a href="{{ route('laporan-dinas.index') }}">
                             <i class="ti-agenda"></i><span>Laporan Dinas</span>
                         </a>
                     </li>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LaporanDinasController;
 use App\Http\Controllers\PencatatanController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -19,8 +20,9 @@ Route::get('/', function () {
     return view('index');
 })->name('index');
 
+Route::get('pencatatan/search', [PencatatanController::class, 'search'])->name('search.pencatatan');
 Route::resource('pencatatan', PencatatanController::class);
-
+Route::resource('laporan-dinas', LaporanDinasController::class);
 
 
 Route::get('login', function() {

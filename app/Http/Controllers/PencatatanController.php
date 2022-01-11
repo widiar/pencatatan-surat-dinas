@@ -29,6 +29,26 @@ class PencatatanController extends Controller
         return view('pencatatan.create');
     }
 
+    public function search(Request $request)
+    {
+        try {
+            $search = $request->search;
+            if (env('DB_CONNECTION') == 'mysql') $surat = PencatatanSurat::where('nomor_surat', 'like', "%$search%")->get();
+            else $surat = PencatatanSurat::where('nomor_surat', 'ilike', "%$search%")->get();
+            $data = [];
+            foreach ($surat as $sr) {
+                $dt = [
+                    'id' => $sr->id,
+                    'text' => $sr->nomor_surat
+                ];
+                array_push($data, $dt);
+            }
+            return response()->json($data);
+        } catch (\Throwable $th) {  
+            return response()->json($th->getMessage(), 500);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *

@@ -17,6 +17,11 @@
 <script src="{{ asset('plugins/datepicker/js/bootstrap-datepicker.min.js') }}"></script>
 
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+
+<script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
 
 @yield('script')
 
@@ -34,4 +39,8 @@
         todayHighlight: true,
         autoclose: true,
     })
+
+    $(function() {
+        bsCustomFileInput.init();
+    }); 
 </script>

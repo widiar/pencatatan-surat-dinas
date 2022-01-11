@@ -31,13 +31,21 @@
 @section('main-content')
 <div class="card shadow mt-5">
     <div class="card-body">
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon ti-close"></i> GAGAL!</h5>
+            {{session('error')}}
+        </div>
+        @endif
         <form action="{{ route('laporan-dinas.update', $data->id) }}" method="POST" enctype="multipart/form-data" id="form">
             @csrf
             @method('PUT')
             <div class="form-group">
                 <label for="text">Nomor Surat<span class="text-danger">*</span></label>
-                <select name="no_surat" required
-                    class="custom-select form-control select2" style="width: 100%">
+                <select name="no_surat"
+                    class="custom-select" disabled style="width: 100%">
+                    <option value="{{ $data->pencatatan_surat_id }}" selected>{{ $data->pencatatan->nomor_surat }}</option>
                 </select>
                 @error('no_surat')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -46,7 +54,7 @@
             <div class="form-group">
                 <label for="hasil">Hasil Laporan<span class="text-danger">*</span></label>
                 <textarea required name="hasil" id="hasil"
-                    class="form-control @error('hasil') is-invalid @enderror">{{ old('hasil') }}</textarea>
+                    class="form-control @error('hasil') is-invalid @enderror">{{ old('hasil', $data->hasil_laporan) }}</textarea>
                 @error('hasil')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -54,27 +62,47 @@
             <div class="form-group">
                 <label for="text">Nota<span class="text-danger">*</span></label>
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input nota" name="nota[]" required accept="image/*" multiple>
+                    <input type="file" class="custom-file-input nota" name="nota[]" accept="image/*" multiple>
                     <label class="custom-file-label label-nota">Select file</label>
                 </div>
                 @error('nota')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-                <div class="row image-nota my-3">
-                    
+                <div class="row my-3">
+                    @foreach ($data->nota as $nota)
+                    <div class="col-3">
+                        <div class="img-frame">
+                            <img src="{{ Storage::url('laporan-dinas/nota/') . $nota->foto }}" alt="" class="img-responsive">
+                            <div class="delete-image hapus-nota" data-id="{{ $nota->id }}"><strong>Delete Image</strong></div>
+                        </div> 
+                    </div>
+                    @endforeach
+                    <div class="image-nota my-3">
+                        
+                    </div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="text">Dokumentasi<span class="text-danger">*</span></label>
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input dokumentasi" name="dokumentasi[]" required accept="image/*" multiple>
+                    <input type="file" class="custom-file-input dokumentasi" name="dokumentasi[]" accept="image/*" multiple>
                     <label class="custom-file-label label-dokumentasi">Select file</label>
                 </div>
                 @error('dokumentasi')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-                <div class="row image-dokumentasi my-3">
-                    
+                <div class="row my-3">
+                    @foreach ($data->dokumentasi as $dokumentasi)
+                    <div class="col-3">
+                        <div class="img-frame">
+                            <img src="{{ Storage::url('laporan-dinas/dokumentasi/') . $dokumentasi->foto }}" alt="" class="img-responsive">
+                            <div class="delete-image hapus-dokumentasi" data-id="{{ $dokumentasi->id }}"><strong>Delete Image</strong></div>
+                        </div> 
+                    </div>
+                    @endforeach
+                    <div class="image-dokumentasi my-3">
+
+                    </div>
                 </div>
             </div>
             <hr>
@@ -135,14 +163,6 @@
         })
     })
 
-    const checkLengthNotaData = () => {
-        let length = 0
-        notaData.forEach(elm => {
-            if(elm !== null) length++
-        })
-        return length
-    }
-
     const changeLabelNota = () => {
         if($('.nota').val() == '' || $('.nota').val() == null){
             $('.label-nota').text('Select file')
@@ -162,7 +182,6 @@
         let id = $(this).data('id')
         notaData[id] = null
         $(this).parent().parent().remove()
-        if(checkLengthNotaData() <= 0) $('.nota').val(null)
         changeLabelNota()
     })
 
@@ -184,14 +203,6 @@
         })
     })
 
-    const checkLengthDokumentasiData = () => {
-        let length = 0
-        dokumentasiData.forEach(elm => {
-            if(elm !== null) length++
-        })
-        return length
-    }
-
     const changeLabelDokumentasi = () => {
         if($('.dokumentasi').val() == '' || $('.dokumentasi').val() == null){
             $('.label-dokumentasi').text('Select file')
@@ -211,7 +222,6 @@
         let id = $(this).data('id')
         dokumentasiData[id] = null
         $(this).parent().parent().remove()
-        if(checkLengthDokumentasiData() <= 0) $('.dokumentasi').val(null)
         changeLabelDokumentasi()
     })
 
@@ -219,16 +229,18 @@
         e.preventDefault()
 
         let dataform = new FormData(this)
-        notaData.forEach(file => {
-            if(file !== null) {
-                dataform.append('notafile[]', file)
-            }
-        })
-        dokumentasiData.forEach(file => {
-            if(file !== null) {
-                dataform.append('dokfile[]', file)
-            }
-        })
+        if(notaData !== undefined)
+            notaData.forEach(file => {
+                if(file !== null) {
+                    dataform.append('notafile[]', file)
+                }
+            })
+        if(dokumentasiData !== undefined)
+            dokumentasiData.forEach(file => {
+                if(file !== null) {
+                    dataform.append('dokfile[]', file)
+                }
+            })
 
         dataform.append('hasil', CKEDITOR.instances.hasil.getData())
         $.ajax({
@@ -239,11 +251,70 @@
             processData: false, 
             success: (res) => {
                 if(res == 'Sukses') window.location.href = '{{ route("laporan-dinas.index") }}'
+                else window.location.href = ''
             }, 
             error: (err) => {
                 console.log(err.responseJSON)
             }
         });
+    })
+
+    $('body').on('click', '.hapus-nota', function(e) {
+        let id = $(this).data('id')
+        let button = $(this)
+        Swal.fire({
+            title: 'Loading',
+            timer: 20000,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+                Swal.showLoading()
+                Swal.stopTimer()
+                $.ajax({
+                    url: `{{ route('delete-nota') }}`,
+                    method: 'DELETE',
+                    data: {
+                        id: id
+                    },
+                    success: (res) => {
+                        button.parent().parent().remove()
+                    },
+                    complete: () => {
+                        Swal.close()
+                    },
+
+                })
+            }
+        })
+    })
+
+    $('body').on('click', '.hapus-dokumentasi', function(e) {
+        let id = $(this).data('id')
+        let button = $(this)
+        Swal.fire({
+            title: 'Loading',
+            timer: 20000,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+                Swal.showLoading()
+                Swal.stopTimer()
+                $.ajax({
+                    url: `{{ route('delete-dokumentasi') }}`,
+                    method: 'DELETE',
+                    data: {
+                        id: id
+                    },
+                    success: (res) => {
+                        button.parent().parent().remove()
+                    },
+                    complete: () => {
+                        Swal.close()
+                    },
+
+                })
+            }
+        })
     })
 
     initSurat()

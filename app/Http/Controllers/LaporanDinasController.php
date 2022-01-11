@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\LaporanDinas;
+use App\Models\LaporanDinasDokumentasi;
+use App\Models\LaporanDinasNota;
 use Illuminate\Http\Request;
 
 class LaporanDinasController extends Controller
@@ -88,7 +90,8 @@ class LaporanDinasController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = LaporanDinas::with(['pencatatan', 'nota', 'dokumentasi'])->findOrFail($id);
+        return view('laporan-dinas.edit', compact('data'));
     }
 
     /**
@@ -100,7 +103,50 @@ class LaporanDinasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'hasil' => 'required'
+        ]);
+        $laporan = LaporanDinas::find($id);
+        $err = 0;
+        $msg = '';
+        if(!$request->notafile && $laporan->nota()->count() <= 0) {
+            $err = 1;
+            $msg .= ' Nota tidak boleh kosong ';
+        }
+        if(!$request->dokfile && $laporan->dokumentasi()->count() <= 0) {
+            $err = 1;
+            $msg .= ' Dokumentasi tidak boleh kosong ';
+        }
+        if($err == 1) {
+            $request->session()->flash('error', $msg);
+            return response()->json('fail');
+        }
+        try {
+            $laporan->hasil_laporan = $request->hasil;
+            //save nota
+            if(isset($request->notafile)) {
+                foreach ($request->notafile as $file) {
+                    $laporan->nota()->create([
+                        'foto' => $file->hashName()
+                    ]);
+                    $file->storeAs('public/laporan-dinas/nota', $file->hashName());
+                }
+            }
+            //save dokumentasi
+            if(isset($request->dokfile)){
+                foreach ($request->dokfile as $file) {
+                    $laporan->dokumentasi()->create([
+                        'foto' => $file->hashName()
+                    ]);
+                    $file->storeAs('public/laporan-dinas/dokumentasi', $file->hashName());
+                }
+            }
+            $laporan->save();
+            $request->session()->flash('success', 'Berhasil menambah data');
+            return response()->json('Sukses');
+        } catch (\Throwable $th) {
+            return response()->json($th->getMessage(), 500);
+        }
     }
 
     /**
@@ -111,6 +157,22 @@ class LaporanDinasController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = LaporanDinas::find($id);
+        $data->delete();
+        return response()->json('Sukses');
+    }
+
+    public function deleteNota(Request $request)
+    {
+        $id = $request->id;
+        LaporanDinasNota::find($id)->delete();
+        return response()->json('deleted');
+    }
+
+    public function deleteDokumentasi(Request $request)
+    {
+        $id = $request->id;
+        LaporanDinasDokumentasi::find($id)->delete();
+        return response()->json('deleted');
     }
 }

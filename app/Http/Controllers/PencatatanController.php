@@ -37,11 +37,13 @@ class PencatatanController extends Controller
             else $surat = PencatatanSurat::where('nomor_surat', 'ilike', "%$search%")->get();
             $data = [];
             foreach ($surat as $sr) {
-                $dt = [
-                    'id' => $sr->id,
-                    'text' => $sr->nomor_surat
-                ];
-                array_push($data, $dt);
+                if($sr->laporan()->count() <= 0) {
+                    $dt = [
+                        'id' => $sr->id,
+                        'text' => $sr->nomor_surat
+                    ];
+                    array_push($data, $dt);
+                }
             }
             return response()->json($data);
         } catch (\Throwable $th) {  

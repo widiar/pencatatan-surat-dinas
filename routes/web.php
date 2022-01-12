@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KunjanganController;
 use App\Http\Controllers\LaporanDinasController;
 use App\Http\Controllers\PencatatanController;
 use App\Http\Controllers\UserController;
@@ -25,6 +26,8 @@ Route::resource('pencatatan', PencatatanController::class);
 Route::delete('laporan-dinas/nota', [LaporanDinasController::class, 'deleteNota'])->name('delete-nota');
 Route::delete('laporan-dinas/dokumentasi', [LaporanDinasController::class, 'deleteDokumentasi'])->name('delete-dokumentasi');
 Route::resource('laporan-dinas', LaporanDinasController::class);
+Route::delete('kunjungan/dokumentasi', [KunjanganController::class, 'deleteDokumentasi'])->name('delete-dokumentasi-kunjungan');
+Route::resource('kunjungan', KunjanganController::class);
 
 
 Route::get('login', function() {

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class LaporanDinas extends Model
 {
@@ -30,6 +31,12 @@ class LaporanDinas extends Model
 
     public function delete()
     {
+        foreach ($this->nota as $data) {
+            Storage::disk('public')->delete('laporan-dinas/nota/' . $data->foto);
+        }
+        foreach ($this->dokumentasi as $data) {
+            Storage::disk('public')->delete('laporan-dinas/dokumentasi/' . $data->foto);
+        }
         $this->nota()->delete();
         $this->dokumentasi()->delete();
         parent::delete();

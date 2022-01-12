@@ -24,8 +24,8 @@
                             <i class="ti-agenda"></i><span>Laporan Dinas</span>
                         </a>
                     </li>
-                    <li class="{{request()->is('berkunjung/*') ? ' active' : '' }}">
-                        <a href="#">
+                    <li class="{{request()->is('kunjungan*') ? ' active' : '' }}">
+                        <a href="{{ route('kunjungan.index') }}">
                             <i class="ti-briefcase"></i><span>Berkunjung</span>
                         </a>
                     </li>

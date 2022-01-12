@@ -23,7 +23,6 @@
 
 <script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
 
-@yield('script')
 
 <script src="{{ asset('js/scripts.js') }}"></script>
 <script src="{{ asset('js/plugins.js') }}"></script>
@@ -44,3 +43,4 @@
         bsCustomFileInput.init();
     }); 
 </script>
+@yield('script')

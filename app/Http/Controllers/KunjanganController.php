@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LaporanDinas;
-use App\Models\LaporanDinasDokumentasi;
-use App\Models\LaporanDinasNota;
+use App\Models\Berkunjung;
+use App\Models\BerkunjungDokumentasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class LaporanDinasController extends Controller
+class KunjanganController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +16,8 @@ class LaporanDinasController extends Controller
      */
     public function index()
     {
-        $laporan = LaporanDinas::with('pencatatan')->get();
-        return view('laporan-dinas.index', compact('laporan'));
+        $datas = Berkunjung::all();
+        return view('berkunjung.index', compact('datas'));
     }
 
     /**
@@ -28,7 +27,7 @@ class LaporanDinasController extends Controller
      */
     public function create()
     {
-        return view('laporan-dinas.create');
+        return view('berkunjung.create');
     }
 
     /**
@@ -39,30 +38,19 @@ class LaporanDinasController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
-        $request->validate([
-            'no_surat' => 'required',
-            'hasil' => 'required'
-        ]);
-        
         try {
-            $lap = LaporanDinas::create([
-                'pencatatan_surat_id' => $request->no_surat,
-                'hasil_laporan' => $request->hasil
+            $data = Berkunjung::create([
+                'nomor_surat' => $request->no_surat,
+                'nama_dinas' => $request->dinas,
+                'tanggal' => $request->tanggal,
+                'tujuan' => $request->tujuan
             ]);
-            //save nota
-            foreach ($request->notafile as $file) {
-                $lap->nota()->create([
-                    'foto' => $file->hashName()
-                ]);
-                $file->storeAs('public/laporan-dinas/nota', $file->hashName());
-            }
             //save dokumentasi
             foreach ($request->dokfile as $file) {
-                $lap->dokumentasi()->create([
+                $data->dokumentasi()->create([
                     'foto' => $file->hashName()
                 ]);
-                $file->storeAs('public/laporan-dinas/dokumentasi', $file->hashName());
+                $file->storeAs('public/kunjungan/dokumentasi', $file->hashName());
             }
             $request->session()->flash('success', 'Berhasil menambah data');
             return response()->json('Sukses');
@@ -79,7 +67,7 @@ class LaporanDinasController extends Controller
      */
     public function show($id)
     {
-        $data = LaporanDinas::with(['nota', 'dokumentasi'])->findOrFail($id);
+        $data = Berkunjung::with('dokumentasi')->findOrFail($id);
         return response()->json($data);
     }
 
@@ -91,8 +79,8 @@ class LaporanDinasController extends Controller
      */
     public function edit($id)
     {
-        $data = LaporanDinas::with(['pencatatan', 'nota', 'dokumentasi'])->findOrFail($id);
-        return view('laporan-dinas.edit', compact('data'));
+        $data = Berkunjung::with('dokumentasi')->findOrFail($id);
+        return view('berkunjung.edit', compact('data'));
     }
 
     /**
@@ -104,17 +92,10 @@ class LaporanDinasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'hasil' => 'required'
-        ]);
-        $laporan = LaporanDinas::find($id);
+        $data = Berkunjung::find($id);
         $err = 0;
         $msg = '';
-        if(!$request->notafile && $laporan->nota()->count() <= 0) {
-            $err = 1;
-            $msg .= ' Nota tidak boleh kosong ';
-        }
-        if(!$request->dokfile && $laporan->dokumentasi()->count() <= 0) {
+        if(!$request->dokfile && $data->dokumentasi()->count() <= 0) {
             $err = 1;
             $msg .= ' Dokumentasi tidak boleh kosong ';
         }
@@ -123,26 +104,21 @@ class LaporanDinasController extends Controller
             return response()->json('fail');
         }
         try {
-            $laporan->hasil_laporan = $request->hasil;
-            //save nota
-            if(isset($request->notafile)) {
-                foreach ($request->notafile as $file) {
-                    $laporan->nota()->create([
-                        'foto' => $file->hashName()
-                    ]);
-                    $file->storeAs('public/laporan-dinas/nota', $file->hashName());
-                }
-            }
+            $data->nomor_surat = $request->no_surat;
+            $data->nama_dinas = $request->dinas;
+            $data->tanggal = $request->tanggal;
+            $data->tujuan = $request->tujuan;
+
             //save dokumentasi
             if(isset($request->dokfile)){
                 foreach ($request->dokfile as $file) {
-                    $laporan->dokumentasi()->create([
+                    $data->dokumentasi()->create([
                         'foto' => $file->hashName()
                     ]);
-                    $file->storeAs('public/laporan-dinas/dokumentasi', $file->hashName());
+                    $file->storeAs('public/kunjungan/dokumentasi', $file->hashName());
                 }
             }
-            $laporan->save();
+            $data->save();
             $request->session()->flash('success', 'Berhasil menambah data');
             return response()->json('Sukses');
         } catch (\Throwable $th) {
@@ -158,25 +134,16 @@ class LaporanDinasController extends Controller
      */
     public function destroy($id)
     {
-        $data = LaporanDinas::find($id);
+        $data = Berkunjung::find($id);
         $data->delete();
         return response()->json('Sukses');
-    }
-
-    public function deleteNota(Request $request)
-    {
-        $id = $request->id;
-        $data = LaporanDinasNota::find($id);
-        Storage::disk('public')->delete('laporan-dinas/nota/' . $data->foto);
-        $data->delete();
-        return response()->json('deleted');
     }
 
     public function deleteDokumentasi(Request $request)
     {
         $id = $request->id;
-        $data = LaporanDinasDokumentasi::find($id);
-        Storage::disk('public')->delete('laporan-dinas/dokumentasi/' . $data->foto);
+        $data = BerkunjungDokumentasi::find($id);
+        Storage::disk('public')->delete('kunjungan/dokumentasi/' . $data->foto);
         $data->delete();
         return response()->json('deleted');
     }

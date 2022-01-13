@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'superadmin',
             'username' => 'superadmin',
+            'is_superadmin' => 1,
             'password' => Hash::make('superadmin')
         ]);
     }

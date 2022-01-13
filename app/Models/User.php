@@ -19,7 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
+        'username',
         'password',
         'avatar',
     ];
@@ -32,4 +32,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function permission()
+    {
+        return $this->hasMany(UserPermission::class, 'user_id');
+    }
 }

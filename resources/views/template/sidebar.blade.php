@@ -29,8 +29,8 @@
                             <i class="ti-briefcase"></i><span>Berkunjung</span>
                         </a>
                     </li>
-                    <li class="{{request()->is('user-management/*') ? ' active' : '' }}">
-                        <a href="#">
+                    <li class="{{request()->is('user-management*') ? ' active' : '' }}">
+                        <a href="{{ route('user.index') }}">
                             <i class="ti-user"></i><span>User Management</span>
                         </a>
                     </li>

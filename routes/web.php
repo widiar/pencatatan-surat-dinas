@@ -29,6 +29,8 @@ Route::resource('laporan-dinas', LaporanDinasController::class);
 Route::delete('kunjungan/dokumentasi', [KunjanganController::class, 'deleteDokumentasi'])->name('delete-dokumentasi-kunjungan');
 Route::resource('kunjungan', KunjanganController::class);
 
+// Route::get('user-management', [UserController::class, 'index'])->name('user.index');
+Route::resource('user-management', UserController::class, ['names' => 'user']);
 
 Route::get('login', function() {
     return view('login');

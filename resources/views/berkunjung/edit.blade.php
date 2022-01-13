@@ -1,6 +1,6 @@
 @extends('template.master')
 
-@section('title', 'Edit Laporan Dinas')
+@section('title', 'Edit Kunjungan')
 
 @section('css')
     <style>

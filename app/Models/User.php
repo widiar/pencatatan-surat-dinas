@@ -37,4 +37,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserPermission::class, 'user_id');
     }
+
+    public function delete()
+    {
+        $this->permission()->delete();
+        parent::delete();
+    }
 }

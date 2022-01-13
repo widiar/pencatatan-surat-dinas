@@ -32,8 +32,8 @@ class UserRequest extends FormRequest
                 Rule::unique('users')->ignore($id),
             ],
             'nama' => 'required',
-            'password' => 'required',
-            'retype_password' => 'required|same:password'
+            // 'password' => 'required',
+            // 'retype_password' => 'required|same:password'
         ];
     }
 

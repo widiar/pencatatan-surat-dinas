@@ -30,7 +30,7 @@ Route::delete('kunjungan/dokumentasi', [KunjanganController::class, 'deleteDokum
 Route::resource('kunjungan', KunjanganController::class);
 
 // Route::get('user-management', [UserController::class, 'index'])->name('user.index');
-Route::resource('user-management', UserController::class, ['names' => 'user']);
+Route::resource('user-management', UserController::class, ['names' => 'user'])->except('show');
 
 Route::get('login', function() {
     return view('login');

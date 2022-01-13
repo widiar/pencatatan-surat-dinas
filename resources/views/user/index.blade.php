@@ -40,12 +40,12 @@
                 <tr>
                     <td>{{ ++$no }}</td>
                     <td>{{ $data->username }}</td>
-                    <td>{{ $data->nama }}</td>
+                    <td>{{ $data->name }}</td>
                     <td class="row justify-content-center" style="min-width: 120px">
-                        <a href="#" class="mx-2">
+                        <a href="{{ route('user.edit', $data->id) }}" class="mx-2">
                             <button class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
                         </a>
-                        <form action="#" method="POST"
+                        <form action="{{ route('user.destroy', $data->id) }}" method="POST"
                             class="deleted">
                             @method('DELETE')
                             @csrf

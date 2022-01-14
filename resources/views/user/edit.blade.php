@@ -247,7 +247,6 @@
                 </tbody>
             </table>
             <button class="btn btn-primary float-right">Save</button>
-            <button class="btn btn-primary">Ganti Password</button>
         </form>
     </div>
 

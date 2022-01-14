@@ -4,9 +4,11 @@
     
 
 @section('main-content')
+@can('create', App\Models\PencatatanSurat::class)
 <a href="{{ route('pencatatan.create') }}" class="mt-5 mb-3">
     <button class="btn btn-primary mb-3 btn-sm mt-5">Tambah Data</button>
 </a>
+@endcan
 <div class="card shadow">
     <div class="card-body">
         @if(session('success'))
@@ -30,7 +32,9 @@
                     <th>Tanggal</th>
                     <th>Berkunjung</th>
                     <th>Status</th>
+                    @canany(['edit', 'delete'], App\Models\PencatatanSurat::class)
                     <th class="text-center">Aksi</th>
+                    @endcanany
                 </tr>
             </thead>
             <tbody class="actionz">
@@ -53,17 +57,23 @@
                         <h3 class="badge badge-success">Selesai</h3>
                         @endif
                     </td>
+                    @canany(['edit', 'delete'], $data)
                     <td class="row justify-content-center" style="min-width: 120px">
+                        @can('edit', $data)
                         <a href="{{ route('pencatatan.edit', $data->id) }}" class="mx-2">
                             <button class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
                         </a>
+                        @endcan
+                        @can('delete', $data)
                         <form action="{{ route('pencatatan.destroy', $data->id) }}" method="POST"
                             class="deleted">
                             @method('DELETE')
                             @csrf
                             <button class="btn btn-danger btn-sm" type="submit"><i class="fas fa-trash"></i></button>
                         </form>
+                        @endcan
                     </td>
+                    @endcanany
                 </tr>
                 @endforeach
                 @endif

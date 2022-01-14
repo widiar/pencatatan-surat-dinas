@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PencatatanRequest;
 use App\Models\PencatatanSurat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PencatatanController extends Controller
 {
@@ -15,6 +16,7 @@ class PencatatanController extends Controller
      */
     public function index()
     {
+        $this->authorize('view', PencatatanSurat::class);
         $pencatatan = PencatatanSurat::all();
         return view('pencatatan.index', compact('pencatatan'));
     }
@@ -26,6 +28,7 @@ class PencatatanController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', PencatatanSurat::class);
         return view('pencatatan.create');
     }
 
@@ -59,6 +62,7 @@ class PencatatanController extends Controller
      */
     public function store(PencatatanRequest $request)
     {
+        $this->authorize('create', PencatatanSurat::class);
         $data = PencatatanSurat::create([
             'nomor_surat' => $request->no_surat,
             'dinas_berkunjung' => $request->dinas,
@@ -89,6 +93,7 @@ class PencatatanController extends Controller
     public function edit($id)
     {
         $data = PencatatanSurat::find($id);
+        $this->authorize('edit', $data);
         return view('pencatatan.edit', compact('data'));
     }
 
@@ -102,6 +107,7 @@ class PencatatanController extends Controller
     public function update(PencatatanRequest $request, $id)
     {
         $data = PencatatanSurat::find($id);
+        $this->authorize('edit', $data);
         $data->nomor_surat = $request->no_surat;
         $data->dinas_berkunjung = $request->dinas;
         $data->tanggal = $request->tanggal;
@@ -119,6 +125,7 @@ class PencatatanController extends Controller
     public function destroy($id)
     {
         $data = PencatatanSurat::find($id);
+        $this->authorize('delete', $data);
         $data->delete();
         return response()->json('Sukses');
     }

@@ -17,12 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-})->name('index');
+Route::get('/', [UserController::class, 'dashboard'])->name('index');
 
 Route::get('pencatatan/search', [PencatatanController::class, 'search'])->name('search.pencatatan');
-Route::resource('pencatatan', PencatatanController::class);
+Route::resource('pencatatan', PencatatanController::class)->except('show');
 Route::delete('laporan-dinas/nota', [LaporanDinasController::class, 'deleteNota'])->name('delete-nota');
 Route::delete('laporan-dinas/dokumentasi', [LaporanDinasController::class, 'deleteDokumentasi'])->name('delete-dokumentasi');
 Route::resource('laporan-dinas', LaporanDinasController::class);

@@ -5,22 +5,32 @@
 
 @section('main-content')
 <div class="row">
-    <div class="col-md-6 mt-5 mb-3">
+    <div class="col-md-4 mt-5 mb-3">
         <div class="card">
             <div class="seo-fact sbg1">
                 <div class="p-4 d-flex justify-content-between align-items-center">
-                    <div class="seofct-icon"><i class="ti-thumb-up"></i> Likes</div>
-                    <h2>2,315</h2>
+                    <div class="seofct-icon"><i class="ti-book"></i> Pencatatan Surat</div>
+                    <h2>{{ $surat }}</h2>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6 mt-md-5 mb-3">
+    <div class="col-md-4 mt-md-5 mb-3">
         <div class="card">
             <div class="seo-fact sbg2">
                 <div class="p-4 d-flex justify-content-between align-items-center">
-                    <div class="seofct-icon"><i class="ti-share"></i> Share</div>
-                    <h2>3,984</h2>
+                    <div class="seofct-icon"><i class="ti-agenda"></i> Laporan Dinas</div>
+                    <h2>{{ $dinas }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mt-md-5 mb-3">
+        <div class="card">
+            <div class="seo-fact sbg3">
+                <div class="p-4 d-flex justify-content-between align-items-center">
+                    <div class="seofct-icon"><i class="ti-briefcase"></i> Kunjungan</div>
+                    <h2>{{ $kunjungan }}</h2>
                 </div>
             </div>
         </div>

@@ -18,6 +18,7 @@ class LaporanDinasController extends Controller
     public function index()
     {
         $laporan = LaporanDinas::with('pencatatan')->get();
+        $this->authorize('view', LaporanDinas::class);
         return view('laporan-dinas.index', compact('laporan'));
     }
 
@@ -28,6 +29,7 @@ class LaporanDinasController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', LaporanDinas::class);
         return view('laporan-dinas.create');
     }
 
@@ -44,7 +46,8 @@ class LaporanDinasController extends Controller
             'no_surat' => 'required',
             'hasil' => 'required'
         ]);
-        
+        $this->authorize('create', LaporanDinas::class);
+    
         try {
             $lap = LaporanDinas::create([
                 'pencatatan_surat_id' => $request->no_surat,
@@ -80,6 +83,7 @@ class LaporanDinasController extends Controller
     public function show($id)
     {
         $data = LaporanDinas::with(['nota', 'dokumentasi'])->findOrFail($id);
+        $this->authorize('view', $data);
         return response()->json($data);
     }
 
@@ -92,6 +96,7 @@ class LaporanDinasController extends Controller
     public function edit($id)
     {
         $data = LaporanDinas::with(['pencatatan', 'nota', 'dokumentasi'])->findOrFail($id);
+        $this->authorize('edit', $data);
         return view('laporan-dinas.edit', compact('data'));
     }
 
@@ -108,6 +113,7 @@ class LaporanDinasController extends Controller
             'hasil' => 'required'
         ]);
         $laporan = LaporanDinas::find($id);
+        $this->authorize('edit', $laporan);
         $err = 0;
         $msg = '';
         if(!$request->notafile && $laporan->nota()->count() <= 0) {
@@ -159,6 +165,7 @@ class LaporanDinasController extends Controller
     public function destroy($id)
     {
         $data = LaporanDinas::find($id);
+        $this->authorize('delete', $data);
         $data->delete();
         return response()->json('Sukses');
     }
@@ -167,6 +174,7 @@ class LaporanDinasController extends Controller
     {
         $id = $request->id;
         $data = LaporanDinasNota::find($id);
+        $this->authorize('edit', $data);
         Storage::disk('public')->delete('laporan-dinas/nota/' . $data->foto);
         $data->delete();
         return response()->json('deleted');
@@ -176,6 +184,7 @@ class LaporanDinasController extends Controller
     {
         $id = $request->id;
         $data = LaporanDinasDokumentasi::find($id);
+        $this->authorize('edit', $data);
         Storage::disk('public')->delete('laporan-dinas/dokumentasi/' . $data->foto);
         $data->delete();
         return response()->json('deleted');

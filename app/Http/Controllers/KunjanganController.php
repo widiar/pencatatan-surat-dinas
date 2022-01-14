@@ -16,6 +16,7 @@ class KunjanganController extends Controller
      */
     public function index()
     {
+        $this->authorize('view', Berkunjung::class);
         $datas = Berkunjung::all();
         return view('berkunjung.index', compact('datas'));
     }
@@ -27,6 +28,7 @@ class KunjanganController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Berkunjung::class);
         return view('berkunjung.create');
     }
 
@@ -38,6 +40,7 @@ class KunjanganController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Berkunjung::class);
         try {
             $data = Berkunjung::create([
                 'nomor_surat' => $request->no_surat,
@@ -68,6 +71,7 @@ class KunjanganController extends Controller
     public function show($id)
     {
         $data = Berkunjung::with('dokumentasi')->findOrFail($id);
+        $this->authorize('view', $data);
         return response()->json($data);
     }
 
@@ -80,6 +84,7 @@ class KunjanganController extends Controller
     public function edit($id)
     {
         $data = Berkunjung::with('dokumentasi')->findOrFail($id);
+        $this->authorize('edit', $data);
         return view('berkunjung.edit', compact('data'));
     }
 
@@ -93,6 +98,7 @@ class KunjanganController extends Controller
     public function update(Request $request, $id)
     {
         $data = Berkunjung::find($id);
+        $this->authorize('edit', $data);
         $err = 0;
         $msg = '';
         if(!$request->dokfile && $data->dokumentasi()->count() <= 0) {
@@ -135,6 +141,7 @@ class KunjanganController extends Controller
     public function destroy($id)
     {
         $data = Berkunjung::find($id);
+        $this->authorize('delete', $data);
         $data->delete();
         return response()->json('Sukses');
     }
@@ -143,6 +150,7 @@ class KunjanganController extends Controller
     {
         $id = $request->id;
         $data = BerkunjungDokumentasi::find($id);
+        $this->authorize('edit', $data);
         Storage::disk('public')->delete('kunjungan/dokumentasi/' . $data->foto);
         $data->delete();
         return response()->json('deleted');

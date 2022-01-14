@@ -4,9 +4,11 @@
     
 
 @section('main-content')
+@can('create', App\Models\LaporanDinas::class)
 <a href="{{ route('laporan-dinas.create') }}" class="mt-5 mb-3">
     <button class="btn btn-primary mb-3 btn-sm mt-5">Tambah Data</button>
 </a>
+@endcan
 <div class="card shadow">
     <div class="card-body">
         @if(session('success'))
@@ -31,7 +33,9 @@
                     <th>Tanggal</th>
                     <th>Nota</th>
                     <th>Dokumentasi</th>
+                    @canany(['edit', 'delete'], App\Models\LaporanDinas::class)
                     <th class="text-center">Aksi</th>
+                    @endcanany
                 </tr>
             </thead>
             <tbody class="actionz">
@@ -50,17 +54,23 @@
                     <td>{{ date('d F Y h:i:s A', strtotime($data->created_at)) }}</td>
                     <td class="text-center"><button data-id="{{ $data->id }}" class="btn btn-sm btn-primary notabtn"><i class="fas fa-eye"></i></button></td>
                     <td class="text-center"><button data-id="{{ $data->id }}" class="btn btn-sm btn-primary dokumentasibtn"><i class="fas fa-eye"></i></button></td>
+                    @canany(['edit', 'delete'], App\Models\LaporanDinas::class)
                     <td class="row justify-content-center" style="min-width: 120px; border: none !important;">
+                        @can('edit', $data)
                         <a href="{{ route('laporan-dinas.edit', $data->id) }}" class="mx-2">
                             <button class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
                         </a>
+                        @endcan
+                        @can('delete', $data)
                         <form action="{{ route('laporan-dinas.destroy', $data->id) }}" method="POST"
                             class="deleted">
                             @method('DELETE')
                             @csrf
                             <button class="btn btn-danger btn-sm" type="submit"><i class="fas fa-trash"></i></button>
                         </form>
+                        @endcan
                     </td>
+                    @endcanany
                 </tr>
                 @endforeach
                 @endif

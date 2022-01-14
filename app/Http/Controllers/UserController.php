@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Models\Berkunjung;
+use App\Models\LaporanDinas;
+use App\Models\PencatatanSurat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,17 +42,20 @@ class UserController extends Controller
 
     public function index()
     {
+        $this->authorize('view', User::class);
         $datas = User::where('is_superadmin', 0)->get();
         return view('user.index', compact('datas'));
     }
 
     public function create()
     {
+        $this->authorize('create', User::class);
         return view('user.create');
     }
 
     public function store(UserRequest $request)
     {
+        $this->authorize('create', User::class);
         $user = User::create([
             'name' => $request->nama,
             'username' => $request->username,
@@ -79,6 +85,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $data = User::with('permission')->find($id);
+        $this->authorize('edit', $data);
         if($data->is_superadmin == 1) abort(403);
         // dd($data->permission->toArray());
         $permission = [];
@@ -94,6 +101,7 @@ class UserController extends Controller
     public function update(UserRequest $request, $id)
     {
         $user = User::with('permission')->find($id);
+        $this->authorize('edit', $user);
         $user->name = $request->nama;
         $user->username = $request->username;
         $avatar = $request->avatar;
@@ -131,11 +139,20 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+        $this->authorize('delete', $user);
         if($user->is_superadmin) abort(403);
         if($user->avatar) {
             Storage::disk('public')->delete('profile/avatar/' . $user->avatar);
         }
         $user->delete();
         return response()->json('Sukses');
+    }
+
+    public function dashboard()
+    {
+        $surat = PencatatanSurat::all()->count();
+        $dinas = LaporanDinas::all()->count();
+        $kunjungan = Berkunjung::all()->count();
+        return view('index', compact('surat', 'dinas', 'kunjungan'));
     }
 }

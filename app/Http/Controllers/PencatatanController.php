@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PencatatanRequest;
 use App\Models\PencatatanSurat;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -18,6 +19,15 @@ class PencatatanController extends Controller
     {
         $this->authorize('view', PencatatanSurat::class);
         $pencatatan = PencatatanSurat::all();
+        foreach ($pencatatan as $pen) {
+            $now = date('Y m d');
+            if($now > date('Y m d', strtotime($pen->tanggal))) {
+                $pen->status = 'selesai';
+            } else if($now == date('Y m d', strtotime($pen->tanggal))){
+                $pen->status = 'berlangsung';
+            }
+            $pen->save();
+        }
         return view('pencatatan.index', compact('pencatatan'));
     }
 

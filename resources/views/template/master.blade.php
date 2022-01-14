@@ -33,7 +33,11 @@
                     </div>
                     <div class="col-sm-6 clearfix">
                         <div class="user-profile pull-right">
+                            @if (Auth::user()->avatar)
+                            <img class="avatar user-thumb" src="{{ Storage::url('profile/avatar/') . Auth::user()->avatar }}" alt="avatar">
+                            @else
                             <img class="avatar user-thumb" src="{{ asset('images/author/avatar.png') }}" alt="avatar">
+                            @endif
                             <h4 class="user-name dropdown-toggle" data-toggle="dropdown">{{ Auth::user()->username }} <i class="fa fa-angle-down"></i></h4>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#">Profile</a>

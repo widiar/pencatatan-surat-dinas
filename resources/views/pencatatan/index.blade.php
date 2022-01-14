@@ -46,7 +46,7 @@
                 <tr>
                     <td>{{ ++$no }}</td>
                     <td>{{ $data->nomor_surat }}</td>
-                    <td>{{ $data->tanggal }}</td>
+                    <td>{{ date('d F Y', strtotime($data->tanggal)) }}</td>
                     <td>{{ $data->dinas_berkunjung }}</td>
                     <td>
                         @if($data->status == 'akan datang')

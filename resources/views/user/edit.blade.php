@@ -259,11 +259,6 @@
         rules: {
             nama: 'required',
             username: 'required',
-            password: 'required',
-            retype_password: {
-                equalTo: '#password',
-                required: true
-            }
         }
     })
 </script>

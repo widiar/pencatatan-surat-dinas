@@ -57,5 +57,16 @@
             $(element).removeClass('is-invalid');
         }
     });
+    jQuery.validator.addMethod("notEqualTo",
+        function(value, element, param) {
+            var notEqual = true;
+            value = $.trim(value);
+            for (i = 0; i < param.length; i++) {
+                if (value == $.trim($(param[i]).val())) { notEqual = false; }
+            }
+            return this.optional(element) || notEqual;
+        },
+        "Please enter a diferent value."
+    );
 </script>
 @yield('script')

@@ -40,7 +40,7 @@
                             @endif
                             <h4 class="user-name dropdown-toggle" data-toggle="dropdown">{{ Auth::user()->username }} <i class="fa fa-angle-down"></i></h4>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Profile</a>
+                                <a class="dropdown-item" href="{{ route('update.profile') }}">Profile</a>
                                 <a class="dropdown-item logout" href="{{ route('logout') }}">Log Out</a>
                             </div>
                         </div>

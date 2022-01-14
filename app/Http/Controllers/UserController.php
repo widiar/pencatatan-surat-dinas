@@ -155,4 +155,41 @@ class UserController extends Controller
         $kunjungan = Berkunjung::all()->count();
         return view('index', compact('surat', 'dinas', 'kunjungan'));
     }
+
+    public function updateProfile()
+    {
+        $data = User::find(Auth::user()->id);
+        return view('user.updateProfile', compact('data'));
+    }
+
+    public function postProfile(Request $request)
+    {
+        $user = User::find(Auth::user()->id);
+        $cek = User::where('username', $request->username)->where('id', '!=', $user->id)->count();
+        if($cek > 0) return redirect()->route('update.profile')->with('error', 'Username already taken')->withInput();
+        $user->name = $request->nama;
+        $user->username = $request->username;
+        $avatar = $request->avatar;
+        if($avatar){
+            if($user->avatar) {
+                Storage::disk('public')->delete('profile/avatar/' . $user->avatar);
+            }
+            $avatar->storeAs('public/profile/avatar', $avatar->hashName());
+            $user->avatar = $avatar->hashName();
+        }
+        $user->save();
+        return redirect()->route('update.profile')->with('success', 'Berhasil ubah profile');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $user = User::find(Auth::user()->id);
+        if(Hash::check($request->oldpassword, $user->password)){
+            $user->password = Hash::make($request->password);
+            $user->save();
+            return redirect()->route('update.profile')->with('success', 'Berhasil ubah password');
+        } else {
+            return redirect()->route('update.profile')->with('error-pw', 'Password lama salah');
+        }
+    }
 }

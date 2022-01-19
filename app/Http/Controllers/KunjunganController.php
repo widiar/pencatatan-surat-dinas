@@ -42,13 +42,13 @@ class KunjunganController extends Controller
     {
         $this->authorize('create', Berkunjung::class);
         try {
-            $fotoSurat = $request->foto_surat;
-            $fotoSurat->storeAs('public/kunjungan/foto-surat', $fotoSurat->hashName());
             $cek = Berkunjung::where('nomor_surat', $request->no_surat)->count();
             if($cek > 0) {
                 $request->session()->flash('error', 'Nomor surat sudah ada');
                 return response()->json('fail');
             }
+            $fotoSurat = $request->foto_surat;
+            $fotoSurat->storeAs('public/kunjungan/foto-surat', $fotoSurat->hashName());
             $data = Berkunjung::create([
                 'nomor_surat' => $request->no_surat,
                 'nama_dinas' => $request->dinas,

@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\KunjanganController;
+use App\Http\Controllers\KunjunganController;
 use App\Http\Controllers\LaporanDinasController;
-use App\Http\Controllers\PencatatanController;
+use App\Http\Controllers\PerjalananController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,13 +26,13 @@ Route::get('logout', [UserController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function(){
     Route::get('/', [UserController::class, 'dashboard'])->name('index');
     
-    Route::get('pencatatan/search', [PencatatanController::class, 'search'])->name('search.pencatatan');
-    Route::resource('pencatatan', PencatatanController::class)->except('show');
+    Route::get('pencatatan/search', [PerjalananController::class, 'search'])->name('search.pencatatan');
+    Route::resource('perjalanan', PerjalananController::class, ['names' => 'pencatatan'])->except('show');
     Route::delete('laporan-dinas/nota', [LaporanDinasController::class, 'deleteNota'])->name('delete-nota');
     Route::delete('laporan-dinas/dokumentasi', [LaporanDinasController::class, 'deleteDokumentasi'])->name('delete-dokumentasi');
     Route::resource('laporan-dinas', LaporanDinasController::class);
-    Route::delete('kunjungan/dokumentasi', [KunjanganController::class, 'deleteDokumentasi'])->name('delete-dokumentasi-kunjungan');
-    Route::resource('kunjungan', KunjanganController::class);
+    Route::delete('kunjungan/dokumentasi', [KunjunganController::class, 'deleteDokumentasi'])->name('delete-dokumentasi-kunjungan');
+    Route::resource('kunjungan', KunjunganController::class);
     
     Route::get('profile/update', [UserController::class, 'updateProfile'])->name('update.profile');
     Route::post('profile/update', [UserController::class, 'postProfile'])->name('post.profile');

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class PencatatanRequest extends FormRequest
+class PerjalananRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,15 +24,16 @@ class PencatatanRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route('pencatatan');
+        $id = $this->route('perjalanan');
         return [
             'no_surat' => [
                 'required',
-                Rule::unique('pencatatan_surats', 'nomor_surat')->ignore($id),
+                Rule::unique('perjalanan', 'nomor_surat')->ignore($id),
             ],
             'dinas' => 'required',
             'tanggal' => 'required',
-            'status' => 'required'
+            'status' => 'required',
+            'foto_surat' => 'image'
         ];
     }
 

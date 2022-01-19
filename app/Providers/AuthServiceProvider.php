@@ -4,11 +4,11 @@ namespace App\Providers;
 
 use App\Models\Berkunjung;
 use App\Models\LaporanDinas;
-use App\Models\PencatatanSurat;
+use App\Models\Perjalanan;
 use App\Models\User;
 use App\Policies\BerkunjungPolicy;
 use App\Policies\LaporanDinasPolicy;
-use App\Policies\PencatatanSuratPolicy;
+use App\Policies\PerjalananPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -22,7 +22,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
-        PencatatanSurat::class => PencatatanSuratPolicy::class,
+        Perjalanan::class => PerjalananPolicy::class,
         LaporanDinas::class => LaporanDinasPolicy::class,
         Berkunjung::class => BerkunjungPolicy::class,
         User::class => UserPolicy::class

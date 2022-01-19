@@ -31,6 +31,13 @@
 @section('main-content')
 <div class="card shadow mt-5">
     <div class="card-body">
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon ti-close"></i> GAGAL!</h5>
+            {{session('error')}}
+        </div>
+        @endif
         <form action="{{ route('kunjungan.store') }}" method="POST" enctype="multipart/form-data" id="form">
             @csrf
             <div class="form-group">
@@ -68,6 +75,16 @@
                 @error('tujuan')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
+            </div>
+            <div class="form-group">
+                <label for="text">Foto Surat<span class="text-danger">*</span></label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input @error('foto_surat') is-invalid @enderror" name="foto_surat" required accept="image/*">
+                    <label class="custom-file-label">Select file</label>
+                    @error('foto_surat')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
             </div>
             <div class="form-group">
                 <label for="text">Dokumentasi<span class="text-danger">*</span></label>
@@ -169,6 +186,7 @@
             processData: false, 
             success: (res) => {
                 if(res == 'Sukses') window.location.href = '{{ route("kunjungan.index") }}'
+                else window.location.href = ''
             }, 
             error: (err) => {
                 console.log(err.responseJSON)

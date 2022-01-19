@@ -1,10 +1,10 @@
 @extends('template.master')
 
-@section('title', 'Pencatatan')
+@section('title', 'Perjalanan')
     
 
 @section('main-content')
-@can('create', App\Models\PencatatanSurat::class)
+@can('create', App\Models\Perjalanan::class)
 <a href="{{ route('pencatatan.create') }}" class="mt-5 mb-3">
     <button class="btn btn-primary mb-3 btn-sm mt-5">Tambah Data</button>
 </a>
@@ -32,7 +32,7 @@
                     <th>Tanggal</th>
                     <th>Berkunjung</th>
                     <th>Status</th>
-                    @canany(['edit', 'delete'], App\Models\PencatatanSurat::class)
+                    @canany(['edit', 'delete'], App\Models\Perjalanan::class)
                     <th class="text-center">Aksi</th>
                     @endcanany
                 </tr>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBerkunjungDokumentasisTable extends Migration
+class CreatePerjalananTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateBerkunjungDokumentasisTable extends Migration
      */
     public function up()
     {
-        Schema::create('berkunjung_dokumentasi', function (Blueprint $table) {
+        Schema::create('perjalanan', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('berkunjung_id');
-            $table->string('foto');
+            $table->string('nomor_surat')->unique();
+            $table->string('dinas_berkunjung');
+            $table->date('tanggal');
+            $table->string('status')->default('akan datang');
+            $table->string('foto_surat')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateBerkunjungDokumentasisTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('berkunjung_dokumentasi');
+        Schema::dropIfExists('perjalanan');
     }
 }

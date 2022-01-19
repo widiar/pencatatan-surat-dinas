@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequest;
 use App\Models\Berkunjung;
 use App\Models\LaporanDinas;
-use App\Models\PencatatanSurat;
+use App\Models\Perjalanan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -150,7 +150,7 @@ class UserController extends Controller
 
     public function dashboard()
     {
-        $surat = PencatatanSurat::all()->count();
+        $surat = Perjalanan::all()->count();
         $dinas = LaporanDinas::all()->count();
         $kunjungan = Berkunjung::all()->count();
         return view('index', compact('surat', 'dinas', 'kunjungan'));

@@ -9,6 +9,6 @@ class BerkunjungDokumentasi extends Model
 {
     use HasFactory;
 
-    protected $table = 'berkunjung_dokumentasi';
+    protected $table = 'kunjungan_dokumentasi';
     protected $guarded = ['id'];
 }

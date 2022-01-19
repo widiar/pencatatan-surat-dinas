@@ -50,7 +50,7 @@ class LaporanDinasController extends Controller
     
         try {
             $lap = LaporanDinas::create([
-                'pencatatan_surat_id' => $request->no_surat,
+                'perjalanan_id' => $request->no_surat,
                 'hasil_laporan' => $request->hasil
             ]);
             //save nota

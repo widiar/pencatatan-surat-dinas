@@ -10,12 +10,12 @@ class Berkunjung extends Model
 {
     use HasFactory;
 
-    protected $table = 'berkunjung';
+    protected $table = 'kunjungan';
     protected $guarded = ['id'];
 
     public function dokumentasi()
     {
-        return $this->hasMany(BerkunjungDokumentasi::class, 'berkunjung_id');
+        return $this->hasMany(BerkunjungDokumentasi::class, 'kunjungan_id');
     }
 
     public function delete()

@@ -16,7 +16,7 @@ class LaporanDinas extends Model
 
     public function pencatatan()
     {
-        return $this->belongsTo(PencatatanSurat::class, 'pencatatan_surat_id', 'id');
+        return $this->belongsTo(Perjalanan::class, 'perjalanan_id', 'id');
     }
 
     public function nota()

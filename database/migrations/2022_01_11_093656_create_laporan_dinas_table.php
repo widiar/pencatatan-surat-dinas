@@ -15,7 +15,7 @@ class CreateLaporanDinasTable extends Migration
     {
         Schema::create('laporan_dinas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pencatatan_surat_id');
+            $table->unsignedBigInteger('perjalanan_id');
             $table->longText('hasil_laporan');
             $table->timestamps();
         });

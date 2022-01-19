@@ -78,6 +78,19 @@
                 @enderror
             </div>
             <div class="form-group">
+                <label for="text">Foto Surat<span class="text-danger">*</span></label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input @error('foto_surat') is-invalid @enderror" name="foto_surat" accept="image/*">
+                    <label class="custom-file-label">Select file</label>
+                    @error('foto_surat')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                @if(!is_null($data->foto_surat))
+                <a href="{{ Storage::url('kunjungan/foto-surat/') . $data->foto_surat }}" target="_blank"><small class="text-info">Lihat Foto Surat</small></a>
+                @endif
+            </div>
+            <div class="form-group">
                 <label for="text">Dokumentasi<span class="text-danger">*</span></label>
                 <div class="custom-file">
                     <input type="file" class="custom-file-input dokumentasi" name="dokumentasi[]" accept="image/*" multiple>

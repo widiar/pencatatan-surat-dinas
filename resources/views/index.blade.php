@@ -9,7 +9,7 @@
         <div class="card">
             <div class="seo-fact sbg1">
                 <div class="p-4 d-flex justify-content-between align-items-center">
-                    <div class="seofct-icon"><i class="ti-book"></i> Pencatatan Surat</div>
+                    <div class="seofct-icon"><i class="ti-book"></i> Perjalanan</div>
                     <h2>{{ $surat }}</h2>
                 </div>
             </div>

@@ -7,7 +7,7 @@ use App\Models\BerkunjungDokumentasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class KunjanganController extends Controller
+class KunjunganController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -42,11 +42,19 @@ class KunjanganController extends Controller
     {
         $this->authorize('create', Berkunjung::class);
         try {
+            $fotoSurat = $request->foto_surat;
+            $fotoSurat->storeAs('public/kunjungan/foto-surat', $fotoSurat->hashName());
+            $cek = Berkunjung::where('nomor_surat', $request->no_surat)->count();
+            if($cek > 0) {
+                $request->session()->flash('error', 'Nomor surat sudah ada');
+                return response()->json('fail');
+            }
             $data = Berkunjung::create([
                 'nomor_surat' => $request->no_surat,
                 'nama_dinas' => $request->dinas,
                 'tanggal' => $request->tanggal,
-                'tujuan' => $request->tujuan
+                'tujuan' => $request->tujuan,
+                'foto_surat' => $fotoSurat->hashName()
             ]);
             //save dokumentasi
             foreach ($request->dokfile as $file) {
@@ -101,6 +109,11 @@ class KunjanganController extends Controller
         $this->authorize('edit', $data);
         $err = 0;
         $msg = '';
+        $cek = Berkunjung::where('nomor_surat', $request->no_surat)->where('id', '!=', $id)->count();
+        if($cek > 0) {
+            $request->session()->flash('error', 'Nomor surat sudah ada');
+            return response()->json('fail');
+        }
         if(!$request->dokfile && $data->dokumentasi()->count() <= 0) {
             $err = 1;
             $msg .= ' Dokumentasi tidak boleh kosong ';
@@ -110,6 +123,14 @@ class KunjanganController extends Controller
             return response()->json('fail');
         }
         try {
+            if(isset($request->foto_surat)){
+                $fotoSurat = $request->foto_surat;
+                $fotoSurat->storeAs('public/kunjungan/foto-surat', $fotoSurat->hashName());
+                if(!is_null($data->foto_surat)) {
+                    Storage::disk('public')->delete('kunjungan/foto-surat/' . $data->foto_surat);
+                }
+                $data->foto_surat = $fotoSurat->hashName();
+            }
             $data->nomor_surat = $request->no_surat;
             $data->nama_dinas = $request->dinas;
             $data->tanggal = $request->tanggal;

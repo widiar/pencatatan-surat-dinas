@@ -15,6 +15,6 @@
 
 ## Demo Sistem
 
-[Surat Dinas](http://pencatatan-surat.herokuapp.com/)
+[Surat Dinas](http://suratdinas.widiarsana.com/)
 -   Username : superadmin
 -   Password : superadmin
